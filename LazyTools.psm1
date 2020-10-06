@@ -11,14 +11,22 @@ function Get-Timestamp {
     $env:time = Get-Date -Format "hh:mm:ss tt"
 }
 
+function Write-LogMessage {
+    param(
+        [Parameter(Mandatory=$true,Position=0)] [string]$Message
+    )
+    Get-Timestamp
+    $Message = "$time :: $Message"
+    Add-Content -Path $env:LazyLogPath -Value $Message
+}
+
 function Test-IPNetworking {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory=$false,Position=0)] [String]$ip = "1.1.1.1" # Default
     )
     $ConnectionTest = Test-Connection $ip -Quiet
-    Get-Timestamp
-    Add-Content -Path $env:LazyLogPath -Value "$time :: Connection Test to $ip returned $ConnectionTest"
+    Write-LogMessage "$time :: Connection Test to $ip returned $ConnectionTest"
     Return $ConnectionTest
 }
 
@@ -28,8 +36,7 @@ function Test-DNSLookup {
         [Parameter(Mandatory=$false,Position=0)] [String]$address = "durish.xyz" # Default
     )
     $ConnectionTest = Test-Connection $address -Quiet
-    Get-Timestamp
-    Add-Content -Path $env:LazyLogPath -Value "$time :: Connection Test to $address returned $ConnectionTest"
+    Write-LogMessage "$time :: Connection Test to $address returned $ConnectionTest"
     Return $ConnectionTest
 }
 
@@ -59,6 +66,9 @@ function Get-PowerPlan {
         }
     }
     Return $PowerPlans
+    foreach ($plan in $PowerPlans) {
+        Write-LogMessage "$plan"
+    }
 }
 
 function Test-Comparison {
@@ -87,6 +97,11 @@ function Test-Comparison {
     Will return $false
 
     #>
+    $trueResultCast = "You compared ($a $operand $b) as $CastType and it returned $true."
+    $trueResultNoCast = "You compared ($a $operand $b) and it returned $true."
+    $falseResultCast = "You compared ($a $operand $b) as $CastType and it returned $false."
+    $falseResultNoCast = "You compared ($a $operand $b) and it returned $false."
+
     switch ($CastType) {
         'int' {
             [int]$a = $a
@@ -106,47 +121,22 @@ function Test-Comparison {
         'eq' {
             if ($a -eq $b) {
                 switch ($CastType) {
-                    'int' {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) as $CastType and it returned $true."
-                        Return $true
-                    }
-                    'string' {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) as $CastType and it returned $true."
-                        Return $true
-                    }
-                    'char' {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) as $CastType and it returned $true."
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $trueResultCast
                         Return $true
                     }
                     default {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) and it returned $true."
+                        Write-LogMessage $trueResultNoCast
                         Return $true
                     }
                 }
             } else {
                 switch ($CastType) {
-                    'int' {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) as $CastType and it returned $false."
-                        Return $false
-                    }
-                    'string' {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) as $CastType and it returned $false."
-                        Return $false
-                    }
-                    'char' {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) as $CastType and it returned $false."
-                        Return $false
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $falseResultCast
                     }
                     default {
-                        Get-Timestamp
-                        Add-Content -Path $env:LazyLogPath -Value "$time :: You compared ($a $operand $b) and it returned $false."
+                        Write-LogMessage $falseResultNoCast
                         Return $false
                     }
                 }
@@ -154,19 +144,129 @@ function Test-Comparison {
             }
         }
         'ne' {
-
+            if ($a -ne $b) {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $trueResultCast
+                        Return $true
+                    }
+                    default {
+                        Write-LogMessage $trueResultNoCast
+                        Return $true
+                    }
+                }
+            } else {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $falseResultCast
+                    }
+                    default {
+                        Write-LogMessage $falseResultNoCast
+                        Return $false
+                    }
+                }
+                
+            }
         }
         'ge' {
-
+            if ($a -ge $b) {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $trueResultCast
+                        Return $true
+                    }
+                    default {
+                        Write-LogMessage $trueResultNoCast
+                        Return $true
+                    }
+                }
+            } else {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $falseResultCast
+                    }
+                    default {
+                        Write-LogMessage $falseResultNoCast
+                        Return $false
+                    }
+                }
+                
+            }
         }
         'gt' {
-
+            if ($a -gt $b) {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $trueResultCast
+                        Return $true
+                    }
+                    default {
+                        Write-LogMessage $trueResultNoCast
+                        Return $true
+                    }
+                }
+            } else {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $falseResultCast
+                    }
+                    default {
+                        Write-LogMessage $falseResultNoCast
+                        Return $false
+                    }
+                }
+                
+            }
         }
         'le' {
-
+            if ($a -le $b) {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $trueResultCast
+                        Return $true
+                    }
+                    default {
+                        Write-LogMessage $trueResultNoCast
+                        Return $true
+                    }
+                }
+            } else {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $falseResultCast
+                    }
+                    default {
+                        Write-LogMessage $falseResultNoCast
+                        Return $false
+                    }
+                }
+                
+            }
         }
         'lt' {
-            
+            if ($a -lt $b) {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $trueResultCast
+                        Return $true
+                    }
+                    default {
+                        Write-LogMessage $trueResultNoCast
+                        Return $true
+                    }
+                }
+            } else {
+                switch ($CastType) {
+                    { 'int', 'string', 'char' -contains $_} {
+                        Write-LogMessage $falseResultCast
+                    }
+                    default {
+                        Write-LogMessage $falseResultNoCast
+                        Return $false
+                    }
+                }
+                
+            }
         }
     }
 }
