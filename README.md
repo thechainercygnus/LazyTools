@@ -17,7 +17,7 @@ Now with these exciting cmdlets:
 * `Test-Comparison "blue" eq "red" string` will cast blue and red as string types and let you know if they're equal.
 4. Get-PowerPlan
 * Returns an object containing all Power Plans that can be selected on the system.
-* ```
+* ```powershell
 PowerPlan                   GUID                            
 ---------                   ----                            
 Balanced                    381b4222-f694-41f0-9685-ff5bb260
@@ -28,5 +28,6 @@ AMD RyzenT High Performance 9935e61f-1661-40c5-ae2f-8495027d
 Power saver                 a1841308-3541-4fab-bc81-f71556f2
 ```
 5. Set-PowerPlan (Coming Soon)
+* What's in a name? Maybe a hint as to functionality!
 
 What more could you ask for? Seriously. [Tell me.](https://github.com/thechainercygnus/LazyTools/issues)
