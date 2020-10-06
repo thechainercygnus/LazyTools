@@ -6,4 +6,4 @@ Now with these exciting cmdlets:
 4. Get-PowerPlan
 5. Set-PowerPlan (Coming Soon)
 
-What more could you ask for? Seriously. Tell me.
+What more could you ask for? Seriously. [Tell me.](https://github.com/thechainercygnus/LazyTools/issues)
