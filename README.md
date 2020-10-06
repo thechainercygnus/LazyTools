@@ -1,4 +1,6 @@
-### LazyTools - [src](https://github.com/thechainercygnus/LazyTools)
+### LazyTools
+#### [src](https://github.com/thechainercygnus/LazyTools)
+
 Now with these exciting cmdlets:
 1. Test-IPNetworking
 * It's like Ping, but with a boolean output!
