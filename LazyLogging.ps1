@@ -18,8 +18,11 @@ if (-not (Test-Path $LazyLogPath)) {
         New-Item -Path $DocumentsFolder -Name $PathArray[3] -ItemType Directory | Out-Null
         $script:FolderCreated = ":: Logging Folder was created"
     } elseif ((Test-Path $LogFolder)) {
-        Get-Timestamp
-        $LogMessages += "$time :: LazyLog folder found"
+        $LogMessages += "\n"
+        $LogMessages += ",.;., ';-;' ,.;.,"
+        $LogMessages += "Look out! A Demon!"
+        $LogMessages += "Maybe he's just lonely."
+        $LogMessages += "\n"
     } else {
         Get-Timestamp
         Write-Error "$time :: Not sure how you made Test-Path return a non-bool result. Good job!"
@@ -41,7 +44,7 @@ if (-not (Test-Path $LazyLogPath)) {
     $LogMessages += "$time :: Enjoy your day"
 } elseif ((Test-Path $Global:LazyLogPath)) {
     Get-Timestamp
-    $LogMessages += "$time :: LazyLog file found"
+    $LogMessages += "$time :: Hello! You loaded a new instance of this module."
 }
 
 foreach ($Message in $LogMessages) {

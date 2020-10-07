@@ -29,7 +29,10 @@ AMD RyzenT Balanced         9897998c-92de-4669-853f-b7cd3ecb
 AMD RyzenT High Performance 9935e61f-1661-40c5-ae2f-8495027d
 Power saver                 a1841308-3541-4fab-bc81-f71556f2
 ```
-5. Set-PowerPlan (Coming Soon)
+5. Open-LazyLog
+* I mean, I guess I should let you know that I log all this activity so you can review it later.
+* If you prefer something other than Notepad, you have access to `$LazyLogPath`.
+6. Set-PowerPlan (Coming Soon)
 * What's in a name? Maybe a hint as to functionality!
 
 What more could you ask for? Seriously. [Tell me.](https://github.com/thechainercygnus/LazyTools/issues)

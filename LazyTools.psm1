@@ -16,8 +16,12 @@ function Write-LogMessage {
         [Parameter(Mandatory=$true,Position=0)] [string]$Message
     )
     Get-Timestamp
-    $Message = "$time :: $Message"
+    $Message = "$env:time :: $Message"
     Add-Content -Path $env:LazyLogPath -Value $Message
+}
+
+function Open-LazyLog {
+    notepad $env:LazyLogPath
 }
 
 function Test-IPNetworking {
@@ -26,7 +30,7 @@ function Test-IPNetworking {
         [Parameter(Mandatory=$false,Position=0)] [String]$ip = "1.1.1.1" # Default
     )
     $ConnectionTest = Test-Connection $ip -Quiet
-    Write-LogMessage "$time :: Connection Test to $ip returned $ConnectionTest"
+    Write-LogMessage "Connection Test to $ip returned $ConnectionTest"
     Return $ConnectionTest
 }
 
@@ -36,7 +40,7 @@ function Test-DNSLookup {
         [Parameter(Mandatory=$false,Position=0)] [String]$address = "durish.xyz" # Default
     )
     $ConnectionTest = Test-Connection $address -Quiet
-    Write-LogMessage "$time :: Connection Test to $address returned $ConnectionTest"
+    Write-LogMessage "Connection Test to $address returned $ConnectionTest"
     Return $ConnectionTest
 }
 
@@ -64,11 +68,9 @@ function Get-PowerPlan {
             PowerPlan = $planName
             GUID = $planGUID
         }
+        Write-LogMessage "Found Power Plan [$planName] with GUID [$planGUID]"
     }
     Return $PowerPlans
-    foreach ($plan in $PowerPlans) {
-        Write-LogMessage "$plan"
-    }
 }
 
 function Test-Comparison {
